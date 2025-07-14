@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>College Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body {
+      height: 100vh;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s, color 0.3s;
+      flex-direction: column;
+    }
+    body.dark {
+      background: #121212;
+      color: #eee;
+    }
+
+    .login-box {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      width: 340px;
+      text-align: center;
+      display: none;
+      position: relative;
+    }
+    body.dark .login-box {
+      background: #1e1e1e;
+      color: #eee;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
+
+    .login-box img { width: 80px; margin-bottom: 15px; }
+    .login-box h2 { margin-bottom: 24px; }
+
+    .input-box { text-align: left; margin-bottom: 20px; position: relative; }
+    .input-box label { display: block; margin-bottom: 6px; font-weight: 600; }
+    .input-box input {
+      width: 100%; padding: 10px; padding-right: 35px;
+      border: 1px solid #ccc; border-radius: 6px; outline: none;
+      background: #fff; color: #000;
+    }
+    body.dark .input-box input {
+      background: #333; color: #eee; border: 1px solid #555;
+    }
+
+    .toggle-password {
+      position: absolute; right: 10px; top: 36px;
+      cursor: pointer; font-size: 16px; color: #666;
+    }
+
+    .login-btn {
+      width: 100%; padding: 12px; background: #2575fc; color: white;
+      font-size: 16px; border: none; border-radius: 6px;
+      cursor: pointer; transition: 0.3s;
+    }
+    .login-btn:hover { background: #1a5ee0; }
+
+    .error { color: red; text-align: center; margin-top: 10px; }
+
+    .dark-toggle {
+      position: absolute; top: 10px; right: 10px;
+    }
+    .dark-toggle input { display: none; }
+    .toggle-label {
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer; font-size: 14px;
+    }
+
+    #welcome-screen {
+      text-align: center; color: white;
+      padding: 40px; max-width: 500px;
+    }
+
+    #welcome-screen img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    #welcome-screen button {
+      margin-top: 20px; padding: 10px 20px;
+      font-size: 16px; background: white;
+      border: none; border-radius: 6px; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🌟 Welcome Screen -->
+  <div id="welcome-screen">
+    <!-- 🏫 University Logo -->
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Patliputra_University.svg/1200px-Patliputra_University.svg.png" alt="Patliputra Logo" />
+    <h1>🎓 Welcome to Patliputra University</h1>
+    <p>Login to access your college dashboard</p>
+    <button onclick="showLogin()">Login</button>
+  </div>
+
+  <!-- 🔐 Login Box -->
+  <div class="login-box" id="login-box">
+    <!-- 🌙 Dark Mode Toggle -->
+    <div class="dark-toggle">
+      <label class="toggle-label">
+        <input type="checkbox" id="darkModeToggle"> 🌙 Dark
+      </label>
+    </div>
+
+    <!-- 🏫 University Logo Again -->
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Patliputra_University.svg/1200px-Patliputra_University.svg.png" alt="Logo" />
+    <h2>College Login</h2>
+
+    <div class="input-box">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter username">
+    </div>
+
+    <div class="input-box">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter password">
+      <span id="togglePassword" class="toggle-password">🔒</span>
+    </div>
+
+    <button class="login-btn" onclick="login()">Login</button>
+    <div class="error" id="error-msg"></div>
+  </div>
+
+  <script>
+    function showLogin() {
+      document.getElementById('welcome-screen').style.display = 'none';
+      document.getElementById('login-box').style.display = 'block';
+    }
+
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+    togglePassword.addEventListener("click", () => {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+      togglePassword.textContent = type === "password" ? "🔒" : "🔓";
+    });
+
+    const darkToggle = document.getElementById('darkModeToggle');
+    const isDark = localStorage.getItem('darkMode') === 'true';
+    if (isDark) {
+      document.body.classList.add('dark');
+      darkToggle.checked = true;
+    }
+    darkToggle.addEventListener('change', () => {
+      if (darkToggle.checked) {
+        document.body.classList.add('dark');
+        localStorage.setItem('darkMode', 'true');
+      } else {
+        document.body.classList.remove('dark');
+        localStorage.setItem('darkMode', 'false');
+      }
+    });
+
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorMsg = document.getElementById("error-msg");
+
+      if (username === "mohit" && password === "1234") {
+        localStorage.setItem("loggedIn", "true");
+        window.location.href = "https://mohitsaxena6363.github.io/mohit-collage63/";
+      } else {
+        errorMsg.textContent = "❌ Invalid username or password";
+      }
+    }
+  </script>
+</body>
+</html>
